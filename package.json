@@ -1,0 +1,23 @@
+{
+    "name": "flare-vpx",
+    "version": "0.0.0",
+    "keywords": [
+        "webm",
+        "vp8"
+    ],
+    "scripts": {
+    "build": "browserify src/main.js > build/test.js "
+    },
+    "author": "Brian Parra",
+    "contributors": [
+    ],
+    "devDependencies": {
+    "browserify": "^13.0.1",
+    "browserify-shim": "^3.5.0",
+    "uglify-js": "2.7.0",
+    "babel-cli": "6.10.1",
+    "babel-preset-es2015": "6.9.0",
+    "envify": "3.4.1"
+  },
+    "main" : "src/main.js"
+}
