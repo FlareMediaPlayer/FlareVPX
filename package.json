@@ -6,7 +6,8 @@
         "vp8"
     ],
     "scripts": {
-    "build": "browserify src/main.js > build/test.js "
+    "build": "browserify src/main.js > build/test.js ",
+         "test": "mocha"
     },
     "author": "Brian Parra",
     "contributors": [
@@ -17,7 +18,9 @@
     "uglify-js": "2.7.0",
     "babel-cli": "6.10.1",
     "babel-preset-es2015": "6.9.0",
-    "envify": "3.4.1"
+    "envify": "3.4.1",
+    "mocha" : "^3.1.2",
+    "flare-ivf" : "^0.0.1"
   },
-    "main" : "src/main.js"
+    "main" : "src/vp8.js"
 }
