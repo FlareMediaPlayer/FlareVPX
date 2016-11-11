@@ -45,7 +45,7 @@ class FrameHeader {
             return VPX_CODEC_CORRUPT_FRAME;
 
         var clear0 = data[0];
-        this.is_keyframe = !(clear0 & 1); 
+        this.is_keyframe = !(clear0 & 0x01); 
         this.version = (clear0 >> 1) & 7;
         this.is_shown = (clear0 >> 4) & 1;
         this.part0_sz =(clear0 | (data[1] << 8) | (data[2] << 16)) >> 5;
@@ -67,6 +67,7 @@ class FrameHeader {
             this.kf.scale_w = CHECK_FOR_UPDATE(this.kf.w, data[7] >> 6 , update);
             this.kf.h = CHECK_FOR_UPDATE(this.kf.h, ((data[8] | (data[9] << 8)) & 0x3fff), update);
             this.kf.scale_h = CHECK_FOR_UPDATE(this.kf.scale_h, data[9] >> 6, update);
+            
             
             this.frame_size_updated = update[0];
 

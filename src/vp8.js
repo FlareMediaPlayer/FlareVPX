@@ -3,6 +3,7 @@
 var FrameHeader = require('./FrameHeader');
 var BoolDecoder = require('./BoolDecoder.js');
 var SegmentHeader = require('./SegmentHeader.js');
+var LoopFilterHeader = require('./LoopFilterHeader.js');
 
 var FRAME_HEADER_SZ = 3;
 var KEYFRAME_HEADER_SZ = 7;
@@ -32,6 +33,7 @@ class Vp8 {
         this.frame_hdr = new FrameHeader();
         this.boolDecoder = new BoolDecoder();
         this.segment_hdr = new SegmentHeader(this);
+        this.loopfilter_hdr = new LoopFilterHeader(this);        
     }
 
     init(callback) {
@@ -70,7 +72,7 @@ class Vp8 {
         var i = 0;
         var row = 0;
         var partition = 0;
-        var ii = 0;
+
 
         this.saved_entropy_valid = 0;
 

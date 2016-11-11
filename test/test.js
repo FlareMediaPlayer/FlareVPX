@@ -30,7 +30,8 @@ function decode_frame(i, valid) {
         decoder.saved_entropy_valid = 0;
         if ((res = decoder.frame_hdr.parse(data, sz)))
             throw "Failed to parse frame header";
-
+        
+        
         assert.equal(decoder.frame_hdr.is_keyframe, valid.is_keyframe);
         assert.equal(decoder.frame_hdr.version, valid.version);
         assert.equal(decoder.frame_hdr.is_shown, valid.is_shown);
@@ -60,9 +61,11 @@ function decode_frame(i, valid) {
 
 
         /* Skip the colorspace and clamping bits */
-        if (decoder.frame_hdr.is_keyframe)
+        if (decoder.frame_hdr.is_keyframe){
             decoder.boolDecoder.get_uint(2);//skip bits for now
-
+        
+        }
+       
 
         decoder.segment_hdr.decode(decoder.boolDecoder);
         assert.equal(decoder.segment_hdr.enabled, valid.enabled);
@@ -82,7 +85,27 @@ function decode_frame(i, valid) {
         assert.equal(decoder.segment_hdr.quant_idx[1], valid["quant_idx[1]"]);
         assert.equal(decoder.segment_hdr.quant_idx[2], valid["quant_idx[2]"]);
         assert.equal(decoder.segment_hdr.quant_idx[3], valid["quant_idx[3]"]);
-
+        
+        assert.equal(decoder.segment_hdr.tree_probs[0], valid["tree_probs[0]"]);
+        assert.equal(decoder.segment_hdr.tree_probs[1], valid["tree_probs[1]"]);
+        assert.equal(decoder.segment_hdr.tree_probs[2], valid["tree_probs[2]"]);
+        
+        decoder.loopfilter_hdr.decode(decoder.boolDecoder);
+        assert.equal(decoder.loopfilter_hdr.use_simple, valid.use_simple);
+        assert.equal(decoder.loopfilter_hdr.level, valid.level);
+        assert.equal(decoder.loopfilter_hdr.sharpness, valid.sharpness);
+        assert.equal(decoder.loopfilter_hdr.delta_enabled, valid.delta_enabled);
+        
+        assert.equal(decoder.loopfilter_hdr.ref_delta[0], valid["ref_delta[0]"]);
+        assert.equal(decoder.loopfilter_hdr.ref_delta[1], valid["ref_delta[1]"]);
+        assert.equal(decoder.loopfilter_hdr.ref_delta[2], valid["ref_delta[2]"]);
+        assert.equal(decoder.loopfilter_hdr.ref_delta[3], valid["ref_delta[3]"]);
+        
+        assert.equal(decoder.loopfilter_hdr.mode_delta[0], valid["mode_delta[0]"]);
+        assert.equal(decoder.loopfilter_hdr.mode_delta[1], valid["mode_delta[1]"]);
+        assert.equal(decoder.loopfilter_hdr.mode_delta[2], valid["mode_delta[2]"]);
+        assert.equal(decoder.loopfilter_hdr.mode_delta[3], valid["mode_delta[3]"]);
+        
     });
 }
 
