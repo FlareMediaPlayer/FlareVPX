@@ -128,6 +128,18 @@ function decode_frame(i, valid) {
         assert.equal(decoder.quant_hdr.uv_dc_delta_q, valid.uv_dc_delta_q);
         assert.equal(decoder.quant_hdr.uv_ac_delta_q, valid.uv_ac_delta_q);
         
+        //Reference Header
+        decoder.reference_hdr.decode(decoder.boolDecoder);
+        assert.equal(decoder.reference_hdr.refresh_last, valid.refresh_last);
+        assert.equal(decoder.reference_hdr.refresh_gf, valid.refresh_gf);
+        assert.equal(decoder.reference_hdr.refresh_arf, valid.refresh_arf);
+        assert.equal(decoder.reference_hdr.copy_gf, valid.copy_gf);
+        assert.equal(decoder.reference_hdr.copy_arf, valid.copy_arf);
+        assert.equal(decoder.reference_hdr.sign_bias[0], valid["sign_bias[0]"]);
+        assert.equal(decoder.reference_hdr.sign_bias[1], valid["sign_bias[1]"]);
+        assert.equal(decoder.reference_hdr.sign_bias[2], valid["sign_bias[2]"]);
+        assert.equal(decoder.reference_hdr.sign_bias[3], valid["sign_bias[3]"]);
+        assert.equal(decoder.reference_hdr.refresh_entropy, valid.refresh_entropy);
         
     });
 }
