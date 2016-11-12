@@ -19,6 +19,7 @@ for(var file in testData){
 
 var FRAME_HEADER_SZ = 3;
 var KEYFRAME_HEADER_SZ = 7;
+var MAX_PARTITIONS = 8;
 var data;
 
 function decode_frame(i, valid) {
@@ -106,6 +107,17 @@ function decode_frame(i, valid) {
         assert.equal(decoder.loopfilter_hdr.mode_delta[2], valid["mode_delta[2]"]);
         assert.equal(decoder.loopfilter_hdr.mode_delta[3], valid["mode_delta[3]"]);
         
+        decoder.token_hdr.decode(data, data.ptr + decoder.frame_hdr.part0_sz,
+                sz - decoder.frame_hdr.part0_sz);
+
+        assert.equal(decoder.token_hdr.partition_sz[0], valid["partition_sz[0]"]);
+        assert.equal(decoder.token_hdr.partition_sz[1], valid["partition_sz[1]"]);
+        assert.equal(decoder.token_hdr.partition_sz[2], valid["partition_sz[2]"]);
+        assert.equal(decoder.token_hdr.partition_sz[3], valid["partition_sz[3]"]);
+        assert.equal(decoder.token_hdr.partition_sz[4], valid["partition_sz[4]"]);
+        assert.equal(decoder.token_hdr.partition_sz[5], valid["partition_sz[5]"]);
+        assert.equal(decoder.token_hdr.partition_sz[6], valid["partition_sz[6]"]);
+        assert.equal(decoder.token_hdr.partition_sz[7], valid["partition_sz[7]"]);
     });
 }
 

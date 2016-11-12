@@ -4,9 +4,11 @@ var FrameHeader = require('./FrameHeader');
 var BoolDecoder = require('./BoolDecoder.js');
 var SegmentHeader = require('./SegmentHeader.js');
 var LoopFilterHeader = require('./LoopFilterHeader.js');
+var TokenHeader = require('./TokenHeader.js');
 
 var FRAME_HEADER_SZ = 3;
 var KEYFRAME_HEADER_SZ = 7;
+var MAX_PARTITIONS = 8;
 
 var getTimestamp;
 if (typeof performance === 'undefined' || typeof performance.now === 'undefined') {
@@ -16,6 +18,16 @@ if (typeof performance === 'undefined' || typeof performance.now === 'undefined'
 }
 
 Uint8Array.prototype.ptr = 0;
+
+class token_decoder {
+    
+    constructor() {
+        this.bool = new BoolDecoder();
+        this.left_token_entropy_ctx = new Int32Array(9);
+        this.coeffs = 0;
+    }
+    
+}
 
 class Vp8 {
 
@@ -33,7 +45,14 @@ class Vp8 {
         this.frame_hdr = new FrameHeader();
         this.boolDecoder = new BoolDecoder();
         this.segment_hdr = new SegmentHeader(this);
-        this.loopfilter_hdr = new LoopFilterHeader(this);        
+        this.loopfilter_hdr = new LoopFilterHeader(this);   
+        this.token_hdr = new TokenHeader(this);
+        
+        
+        
+        this.tokens = new Array(MAX_PARTITIONS);
+        for (var i = 0; i < MAX_PARTITIONS; i ++)
+            this.tokens[i] = new token_decoder();
     }
 
     init(callback) {
