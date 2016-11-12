@@ -5,6 +5,8 @@ var BoolDecoder = require('./BoolDecoder.js');
 var SegmentHeader = require('./SegmentHeader.js');
 var LoopFilterHeader = require('./LoopFilterHeader.js');
 var TokenHeader = require('./TokenHeader.js');
+var QuantizationHeader = require('./QuantizationHeader.js');
+
 
 var FRAME_HEADER_SZ = 3;
 var KEYFRAME_HEADER_SZ = 7;
@@ -47,6 +49,7 @@ class Vp8 {
         this.segment_hdr = new SegmentHeader(this);
         this.loopfilter_hdr = new LoopFilterHeader(this);   
         this.token_hdr = new TokenHeader(this);
+        this.quant_hdr = new QuantizationHeader();
         
         
         

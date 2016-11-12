@@ -118,6 +118,17 @@ function decode_frame(i, valid) {
         assert.equal(decoder.token_hdr.partition_sz[5], valid["partition_sz[5]"]);
         assert.equal(decoder.token_hdr.partition_sz[6], valid["partition_sz[6]"]);
         assert.equal(decoder.token_hdr.partition_sz[7], valid["partition_sz[7]"]);
+        
+        decoder.quant_hdr.decode(decoder.boolDecoder);
+        assert.equal(decoder.quant_hdr.q_index, valid.q_index);
+        assert.equal(decoder.quant_hdr.delta_update, valid.delta_update);
+        assert.equal(decoder.quant_hdr.y1_dc_delta_q, valid.y1_dc_delta_q);
+        assert.equal(decoder.quant_hdr.y2_dc_delta_q, valid.y2_dc_delta_q);
+        assert.equal(decoder.quant_hdr.y2_ac_delta_q, valid.y2_ac_delta_q);
+        assert.equal(decoder.quant_hdr.uv_dc_delta_q, valid.uv_dc_delta_q);
+        assert.equal(decoder.quant_hdr.uv_ac_delta_q, valid.uv_ac_delta_q);
+        
+        
     });
 }
 
