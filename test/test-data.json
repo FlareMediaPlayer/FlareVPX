@@ -67,7 +67,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -129,7 +130,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -198,7 +200,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -260,7 +263,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -322,7 +326,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -384,7 +389,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -446,7 +452,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -508,7 +515,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -570,7 +578,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -632,7 +641,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -694,7 +704,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -756,7 +767,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -818,7 +830,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -880,7 +893,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -942,7 +956,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1004,7 +1019,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1066,7 +1082,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1128,7 +1145,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1190,7 +1208,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1252,7 +1271,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1314,7 +1334,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1376,7 +1397,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1438,7 +1460,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1500,7 +1523,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1562,7 +1586,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1624,7 +1649,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1686,7 +1712,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1748,7 +1775,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1810,7 +1838,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1872,7 +1901,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1934,7 +1964,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -1996,7 +2027,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2058,7 +2090,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2120,7 +2153,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2182,7 +2216,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2244,7 +2279,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2306,7 +2342,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2368,7 +2405,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2430,7 +2468,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2492,7 +2531,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2554,7 +2594,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2616,7 +2657,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2678,7 +2720,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2740,7 +2783,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2802,7 +2846,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2864,7 +2909,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2926,7 +2972,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -2988,7 +3035,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
 ,
 {
@@ -3050,8 +3098,8 @@
 "sign_bias[1]" : 0 ,
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
-"refresh_entropy" : 1 
+"refresh_entropy" : 1 ,
+"saved_entropy_valid" : 0 
 }
-
     ]
 }

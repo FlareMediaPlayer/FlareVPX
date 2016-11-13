@@ -7,6 +7,7 @@ var LoopFilterHeader = require('./LoopFilterHeader.js');
 var TokenHeader = require('./TokenHeader.js');
 var QuantizationHeader = require('./QuantizationHeader.js');
 var ReferenceHeader = require('./ReferenceHeader.js');
+var EntropyHeader = require('./EntropyHeader.js');
 
 var FRAME_HEADER_SZ = 3;
 var KEYFRAME_HEADER_SZ = 7;
@@ -44,6 +45,9 @@ class Vp8 {
 
         this.cpuTime = 0;
 
+        this.saved_entropy_valid = 0;
+
+
         this.frame_hdr = new FrameHeader();
         this.boolDecoder = new BoolDecoder();
         this.segment_hdr = new SegmentHeader(this);
@@ -51,7 +55,8 @@ class Vp8 {
         this.token_hdr = new TokenHeader(this);
         this.quant_hdr = new QuantizationHeader();
         this.reference_hdr = new ReferenceHeader(this);
-        
+        this.entropy_hdr = new EntropyHeader(this);
+        this.saved_entropy = new EntropyHeader(this);
         
         
         this.tokens = new Array(MAX_PARTITIONS);

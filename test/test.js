@@ -141,6 +141,21 @@ function decode_frame(i, valid) {
         assert.equal(decoder.reference_hdr.sign_bias[3], valid["sign_bias[3]"]);
         assert.equal(decoder.reference_hdr.refresh_entropy, valid.refresh_entropy);
         
+
+        if (decoder.frame_hdr.is_keyframe === true)
+            // Load coefficient probability updates
+            decoder.entropy_hdr.loadDefaultProbs();
+
+        if (decoder.reference_hdr.refresh_entropy === 0) {
+            //this should probably be a deep copy
+            decoder.saved_entropy = decoder.entropy_hdr;
+            decoder.saved_entropy_valid = 1;
+        }
+        
+        assert.equal(decoder.saved_entropy_valid, valid.saved_entropy_valid);
+        
+     
+
     });
 }
 
