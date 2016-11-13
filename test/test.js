@@ -153,8 +153,14 @@ function decode_frame(i, valid) {
         }
         
         assert.equal(decoder.saved_entropy_valid, valid.saved_entropy_valid);
-        
-     
+        decoder.entropy_hdr.decode();
+
+        //Test decoded data
+        assert.equal(decoder.entropy_hdr.coeff_skip_enabled, valid.coeff_skip_enabled);
+        assert.equal(decoder.entropy_hdr.coeff_skip_prob, valid.coeff_skip_prob);
+        assert.equal(decoder.entropy_hdr.prob_inter, valid.prob_inter);
+        assert.equal(decoder.entropy_hdr.prob_last, valid.prob_last);
+        assert.equal(decoder.entropy_hdr.prob_gf, valid.prob_gf);
 
     });
 }
