@@ -18,7 +18,7 @@ class QuantizationHeader {
         var last_q = this.q_index;
 
         this.q_index = bool.get_uint(7);
-        update = (last_q != this.q_index) + 0;
+        update = (last_q !== this.q_index) + 0;
         update |= (this.y1_dc_delta_q = bool.maybe_get_int(4));
         update |= (this.y2_dc_delta_q = bool.maybe_get_int(4));
         update |= (this.y2_ac_delta_q = bool.maybe_get_int(4));

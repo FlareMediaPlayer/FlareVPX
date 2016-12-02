@@ -2,7 +2,7 @@
 var TABLES = require('./Tables.js');
 var k_coeff_entropy_update_probs = TABLES.k_coeff_entropy_update_probs;
 var k_mv_entropy_update_probs = TABLES.k_mv_entropy_update_probs;
-var k_default_mv_probs = TABLES.k_default_mv_probs
+var k_default_mv_probs = TABLES.k_default_mv_probs;
 
 var BLOCK_TYPES = 4;
 var PREV_COEF_CONTEXTS = 3;
@@ -112,20 +112,26 @@ class EntropyHeader {
         var coeff_probs = this.coeff_probs;
         
         /* Read coefficient probability updates */
-        for (i = 0; i < BLOCK_TYPES; i++)
-            for (j = 0; j < COEF_BANDS; j++)
-                for (k = 0; k < PREV_COEF_CONTEXTS; k++)
+        for (i = 0; i < BLOCK_TYPES; i++) {
+            for (j = 0; j < COEF_BANDS; j++) {
+                for (k = 0; k < PREV_COEF_CONTEXTS; k++) {
                     for (l = 0; l < ENTROPY_NODES; l++) {
-                        if (bool.get_prob(k_coeff_entropy_update_probs[i][j][k][l]))
+                        if (bool.get_prob(k_coeff_entropy_update_probs[i][j][k][l])){
                             coeff_probs[x] = bool.get_uint(8);
+                        }
                         x++;
                     }
+                }
+            }
+        }
 
         /* Read coefficient skip mode probability */
         this.coeff_skip_enabled = bool.get_bit();
 
         if (this.coeff_skip_enabled === 1)
             this.coeff_skip_prob = bool.get_uint(8);
+        else
+            this.coeff_skip_prob = 0;
 
         /* Parse interframe probability updates */
         if (decoder.frame_hdr.is_keyframe === false) {

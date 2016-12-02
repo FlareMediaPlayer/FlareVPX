@@ -8,10 +8,30 @@ var TokenHeader = require('./TokenHeader.js');
 var QuantizationHeader = require('./QuantizationHeader.js');
 var ReferenceHeader = require('./ReferenceHeader.js');
 var EntropyHeader = require('./EntropyHeader.js');
+var vpx_image_t = require('./Image.js');
+var mb_info = require('./MacroblockInfo.js');
+var Predict = require('./Predict.js');
+var TABLES = require('./Tables.js');
+
+var TOKEN_BLOCK_Y1 = 0;
+var TOKEN_BLOCK_UV = 1;
+var TOKEN_BLOCK_Y2 = 2;
+var TOKEN_BLOCK_TYPES = 3;
+
 
 var FRAME_HEADER_SZ = 3;
 var KEYFRAME_HEADER_SZ = 7;
 var MAX_PARTITIONS = 8;
+
+
+var CURRENT_FRAME = 0;
+var LAST_FRAME = 1;
+var GOLDEN_FRAME = 2;
+var ALTREF_FRAME = 3;
+var NUM_REF_FRAMES = 4;
+
+var MAX_PARTITIONS = 8;
+var MAX_MB_SEGMENTS = 4;
 
 var getTimestamp;
 if (typeof performance === 'undefined' || typeof performance.now === 'undefined') {
@@ -21,6 +41,89 @@ if (typeof performance === 'undefined' || typeof performance.now === 'undefined'
 }
 
 Uint8Array.prototype.ptr = 0;
+
+var ref_cnt_img = function () {
+    this.img = new vpx_image_t();
+    this.ref_cnt = 0;
+};
+
+
+class dequant_factors {
+    constructor() {
+        this.quant_idx = 0;
+        this.factor = [
+            new Int16Array([0, 0]), //Y1
+            new Int16Array([0, 0]), // UV
+            new Int16Array([0, 0]) //Y2
+        ];
+        
+    }
+}
+
+//Helper functions for dequant_init
+var min = Math.min;
+var max = Math.max;
+
+function clamp_q(q) {
+   return min(max(q, 0), 127)|0;
+}
+
+var dc_q_lookup = TABLES.dc_q_lookup;
+
+function dc_q(q) {
+    return dc_q_lookup[clamp_q(q)]|0;
+}
+
+var ac_q_lookup = TABLES.ac_q_lookup;
+
+function ac_q(q) {
+    return ac_q_lookup[clamp_q(q)]|0;
+}
+
+function dequant_init(factors, seg, quant_hdr) {
+    var i = 0;
+    var q = 0;
+    var dqf = factors;
+    var factor;
+    
+    var length = 1;
+    if(seg.enabled === 1){
+        length = MAX_MB_SEGMENTS;
+    }
+
+    for (i = 0; i < length; i++) {
+        q = quant_hdr.q_index;
+
+        if (seg.enabled === 1)
+            q = (!seg.abs) ? q + seg.quant_idx[i] : seg.quant_idx[i];
+
+        factor = dqf[i].factor;
+
+        if (dqf[i].quant_idx !== q || quant_hdr.delta_update) {
+            factor[TOKEN_BLOCK_Y1][0] =
+                    dc_q(q + quant_hdr.y1_dc_delta_q);
+            factor[TOKEN_BLOCK_Y1][1] =
+                    ac_q(q);
+            factor[TOKEN_BLOCK_UV][0] =
+                    dc_q(q + quant_hdr.uv_dc_delta_q);
+            factor[TOKEN_BLOCK_UV][1] =
+                    ac_q(q + quant_hdr.uv_ac_delta_q);
+            factor[TOKEN_BLOCK_Y2][0] =
+                    dc_q(q + quant_hdr.y2_dc_delta_q) << 1; 
+            factor[TOKEN_BLOCK_Y2][1] =
+                    (ac_q(q + quant_hdr.y2_ac_delta_q) * 1.55) | 0;
+
+            if (factor[TOKEN_BLOCK_Y2][1] < 8)
+                factor[TOKEN_BLOCK_Y2][1] = 8;
+
+            if (factor[TOKEN_BLOCK_UV][0] > 132)
+                factor[TOKEN_BLOCK_UV][0] = 132;
+
+            dqf[i].quant_idx = q;
+        }
+    }
+}
+
 
 class token_decoder {
     
@@ -62,6 +165,40 @@ class Vp8 {
         this.tokens = new Array(MAX_PARTITIONS);
         for (var i = 0; i < MAX_PARTITIONS; i ++)
             this.tokens[i] = new token_decoder();
+        
+        
+        
+        this.frame_strg = [
+            {
+                img: new vpx_image_t(),
+                ref_cnt: 0
+            },
+            {
+                img: new vpx_image_t(),
+                ref_cnt: 0
+            },
+            {
+                img: new vpx_image_t(),
+                ref_cnt: 0
+            },
+            {
+                img: new vpx_image_t(),
+                ref_cnt: 0
+            }
+        ];
+        
+        
+        this.ref_frames = new Array(NUM_REF_FRAMES);
+        for (var i = 0; i < NUM_REF_FRAMES; i ++)
+            this.ref_frames[i] = new ref_cnt_img();
+        
+        this.dequant_factors = new Array(MAX_MB_SEGMENTS);
+        for (var i = 0; i < MAX_MB_SEGMENTS; i ++)
+            this.dequant_factors[i] = new dequant_factors();
+
+        this.ref_frame_offsets = new Uint32Array([0, 0, 0, 0]); 
+        this.ref_frame_offsets_ = [0, 0, 0, 0]; 
+        this.subpixel_filters = null;
     }
 
     init(callback) {
@@ -126,6 +263,60 @@ class Vp8 {
         //throw "colorspace error";
 
         this.segment_hdr.decode(this.boolDecoder);
+    }
+    
+    /**
+     * vp8_dixie_modemv_init
+     * @returns {undefined}
+     */
+    modemv_init() {
+        var mbi_w = 0;
+        var mbi_h = 0;
+        var i = 0;
+        var mbi = new mb_info();
+        var ptr = 0;//*
+
+        mbi_w = this.mb_cols + 1; /* For left border col */
+        mbi_h = this.mb_rows + 1; /* For above border row */
+
+        if (this.frame_hdr.frame_size_updated === 1) {
+            this.mb_info_storage = null;
+            this.mb_info_rows_storage = null;
+        }
+
+        if (this.mb_info_storage === null) {
+            var length = mbi_w * mbi_h;
+            this.mb_info_storage = new Array(length);
+
+
+            for (var i = 0; i < length; i ++)
+                this.mb_info_storage[i] = new mb_info();
+
+            this.mb_info_storage_off = 0;
+        }
+
+        if (this.mb_info_rows_storage === null) {
+            this.mb_info_rows_storage_off = new Uint32Array(mbi_h);
+        }
+
+        ptr = this.mb_info_storage_off + 1;
+
+        for (i = 0; i < mbi_h; i++) {
+            this.mb_info_rows_storage_off[i] = ptr;
+            ptr = (ptr + mbi_w)|0;
+        }
+        
+
+        this.mb_info_rows = this.mb_info_storage;
+        this.mb_info_rows_off = this.mb_info_rows_storage_off;//todo: + 1;
+    }
+    
+    /**
+     * Use this just for testing, figure out where to put this later
+     * @returns {undefined}
+     */
+    dequantInit(){
+        dequant_init(this.dequant_factors, this.segment_hdr, this.quant_hdr);
     }
 }
 

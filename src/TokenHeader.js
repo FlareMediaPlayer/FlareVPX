@@ -11,6 +11,18 @@ class TokenHeader {
     }
 
     decode(data, ptr, sz) {
+        //Reset our partition sizes, probably not necessary, but just to be safe
+        //To do, get rid of this if at the end program is correct
+        this.partition_sz[0] = 0;
+        this.partition_sz[1] = 0;
+        this.partition_sz[2] = 0;
+        this.partition_sz[3] = 0;
+        this.partition_sz[4] = 0;
+        this.partition_sz[5] = 0;
+        this.partition_sz[6] = 0;
+        this.partition_sz[7] = 0;
+        
+        
         var i = 0;
         var decoder = this.decoder;
         var bool = decoder.boolDecoder;
@@ -37,12 +49,10 @@ class TokenHeader {
         }
 
 
-        for (i = 0; i < decoder.token_hdr.partitions; i++) {
-            //init_bool_decoder(ctx.tokens[i].bool, data, ptr,
-            //      ctx.token_hdr.partition_sz[i]);
+        for (i = 0; i < partitions; i++) {
             decoder.tokens[i].bool.init(data, ptr,
-                    decoder.token_hdr.partition_sz[i]);
-            ptr += decoder.token_hdr.partition_sz[i];
+                    this.partition_sz[i]);
+            ptr += this.partition_sz[i];
         }
     }
     
@@ -57,7 +67,7 @@ class TokenHeader {
 
         if (ctx.frame_hdr.frame_size_updated === 1) {
             var i = 0;
-            var coeff_row_sz = ctx.mb_cols * 400; //25*16
+            var coeff_row_sz = ctx.mb_cols * 400;
 
             for (i = 0; i < partitions; i++) {
                 ctx.tokens[i].coeffs = new Uint32Array(coeff_row_sz);
