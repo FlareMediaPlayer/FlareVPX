@@ -178,6 +178,15 @@ function decode_frame(i, valid, demuxer) {
            assert.equal(decoder.entropy_hdr.prob_gf, valid.prob_gf);
         }
         
+        assert.equal(decoder.entropy_hdr.y_mode_probs[0], valid["y_mode_probs[0]"]);
+        assert.equal(decoder.entropy_hdr.y_mode_probs[1], valid["y_mode_probs[1]"]);
+        assert.equal(decoder.entropy_hdr.y_mode_probs[2], valid["y_mode_probs[2]"]);
+        assert.equal(decoder.entropy_hdr.y_mode_probs[3], valid["y_mode_probs[3]"]);
+        
+        assert.equal(decoder.entropy_hdr.uv_mode_probs[0], valid["uv_mode_probs[0]"]);
+        assert.equal(decoder.entropy_hdr.uv_mode_probs[1], valid["uv_mode_probs[1]"]);
+        assert.equal(decoder.entropy_hdr.uv_mode_probs[2], valid["uv_mode_probs[2]"]);
+ 
 
         
         /*
