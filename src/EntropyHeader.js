@@ -1,6 +1,7 @@
 'use strict';
 var TABLES = require('./Tables.js');
 var k_coeff_entropy_update_probs = TABLES.k_coeff_entropy_update_probs;
+//var k_coeff_entropy_update_probs_flat = TABLES.k_coeff_entropy_update_probs_flat;
 var k_mv_entropy_update_probs = TABLES.k_mv_entropy_update_probs;
 var k_default_mv_probs = TABLES.k_default_mv_probs;
 
@@ -66,17 +67,18 @@ class EntropyHeader {
         var probs = TABLES.k_default_coeff_probs_32;
 
        
-       /*
+       var probs = TABLES.k_default_coeff_probs;
         var i = 1056;
         while (i--)
             this.coeff_probs[i] = probs[i];
-        */
+        this.coeff_probs[0] = probs[0];
         
+        /*
         var i = 264;
         var coeff_probs_32 = this.coeff_probs_32;
         while (i--)
             coeff_probs_32[i] = probs[i];
-        
+        */
        //this.coeff_probs = probs.slice();
         
         //load mv probs
@@ -112,6 +114,7 @@ class EntropyHeader {
         var coeff_probs = this.coeff_probs;
         
         /* Read coefficient probability updates */
+        
         for (i = 0; i < BLOCK_TYPES; i++) {
             for (j = 0; j < COEF_BANDS; j++) {
                 for (k = 0; k < PREV_COEF_CONTEXTS; k++) {
@@ -124,7 +127,9 @@ class EntropyHeader {
                 }
             }
         }
+        
 
+       
         /* Read coefficient skip mode probability */
         this.coeff_skip_enabled = bool.get_bit();
 

@@ -168,6 +168,10 @@ function decode_frame(i, valid, demuxer) {
         
         //Something wrong with this test
         //assert.equal(md5(decoder.entropy_hdr.coeff_probs), valid.coeff_probs);
+        //assert.equal(decoder.entropy_hdr.coeff_probs[0], valid.coeff_probs[0][0][0][0]);
+        //console.log(valid.coeff_probs[0]);
+        //console.log(decoder.entropy_hdr.coeff_probs[0]);
+        
         
         assert.equal(decoder.entropy_hdr.coeff_skip_enabled, valid.coeff_skip_enabled);
         assert.equal(decoder.entropy_hdr.coeff_skip_prob, valid.coeff_skip_prob);
@@ -189,14 +193,19 @@ function decode_frame(i, valid, demuxer) {
  
 
         
-        /*
+        
         decoder.modemv_init();
         decoder.token_hdr.init();
         Predict.vp8_dixie_predict_init(decoder);
         decoder.dequantInit();
         
+        var length = 1;
+        if (decoder.segment_hdr.enabled === 1) {
+            length = 4;
+        }
+    
         //Test the quantize factors
-        for(var i =0 ; i < 4; i++){
+        for(var i =0 ; i < length; i++){
             var keyStringBase = "dequant_factors[" + i + "]";
             assert.equal(decoder.dequant_factors[i].quant_idx, valid[keyStringBase + ".quant_idx"]);
             
@@ -209,7 +218,7 @@ function decode_frame(i, valid, demuxer) {
             assert.equal(decoder.dequant_factors[i].factor[2][0], valid[keyStringBase + ".factor[2][0]"]);
             assert.equal(decoder.dequant_factors[i].factor[2][1], valid[keyStringBase + ".factor[2][1]"]);
         }
-        */
+        
         
     });
 }
