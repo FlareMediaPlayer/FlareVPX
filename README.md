@@ -1,4 +1,4 @@
 # FlareVPX
 VP8 Decoder
 
-![Test Badge](./badge.svg)
+![Test Badge](badge.svg)
