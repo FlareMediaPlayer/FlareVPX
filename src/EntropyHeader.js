@@ -4,6 +4,7 @@ var k_coeff_entropy_update_probs = TABLES.k_coeff_entropy_update_probs;
 //var k_coeff_entropy_update_probs_flat = TABLES.k_coeff_entropy_update_probs_flat;
 var k_mv_entropy_update_probs = TABLES.k_mv_entropy_update_probs;
 var k_default_mv_probs = TABLES.k_default_mv_probs;
+var default_coef_probs = require('./common/default_coef_probs.js');
 var vp8_coef_update_probs = require('./common/coefupdateprobs.js');
 
 var BLOCK_TYPES = 4;
@@ -92,7 +93,7 @@ class EntropyHeader {
           //  this.coeff_probs[i] = probs[i];
           
         for(var i = 0; i < 1056; i++){
-            this.coeff_probs[i] = vp8_coef_update_probs[i];
+            this.coeff_probs[i] = default_coef_probs[i];
             //console.warn(this.coeff_probs_32);
             //console.warn(TABLES.k_default_coeff_probs_32);
             //throw "er";
@@ -153,7 +154,7 @@ class EntropyHeader {
 
         
         for(var i = 0; i < 1056; i++) {
-            if (bool.get_prob(TABLES.k_coeff_entropy_update_probs_flat[i]) === 1)
+            if (bool.get_prob(vp8_coef_update_probs[i]) === 1)
                 coeff_probs[i] = bool.get_uint(8);
         }
 

@@ -1,4 +1,4 @@
-var MotionVector = require('./MotionVector.js');
+var MotionVector = require('./common/mv.js');
 var TABLES = require('./Tables.js');
 
 var CURRENT_FRAME = 0;

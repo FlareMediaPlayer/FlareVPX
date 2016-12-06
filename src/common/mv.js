@@ -4,7 +4,7 @@ class MotionVector {
     
     constructor() {
         var internalStruct = new Int16Array(2);
-        var internalStruct32 = new Uint32Array(internalStruct.buffer);
+        //var internalStruct32 = new Uint32Array(internalStruct.buffer);
 
         this.x = 0;
         this.y = 0;
