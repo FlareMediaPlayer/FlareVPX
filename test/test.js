@@ -299,5 +299,5 @@ describe('Running Test Vectors', function () {
         
     }
     
-    console.warn("HASH IS: " + md5(TABLES.k_default_coeff_probs));
+
 });

@@ -4,6 +4,7 @@ var k_coeff_entropy_update_probs = TABLES.k_coeff_entropy_update_probs;
 //var k_coeff_entropy_update_probs_flat = TABLES.k_coeff_entropy_update_probs_flat;
 var k_mv_entropy_update_probs = TABLES.k_mv_entropy_update_probs;
 var k_default_mv_probs = TABLES.k_default_mv_probs;
+var vp8_coef_update_probs = require('./common/coefupdateprobs.js');
 
 var BLOCK_TYPES = 4;
 var PREV_COEF_CONTEXTS = 3;
@@ -69,16 +70,41 @@ class EntropyHeader {
     }
     
     loadDefaultProbs() {
+        var probs;
         //load coef probs
+       //if(md5(TABLES.k_default_coeff_probs_32) !== md5(TABLES.k_default_coeff_probs))
+         //   console.warn("Invalid copy");
+        
+        /*
         var probs = TABLES.k_default_coeff_probs_32;
-
-       
         var probs = TABLES.k_default_coeff_probs;
         var i = 1056;
         while (i--)
             this.coeff_probs[i] = probs[i];
+        */
         
-        
+       
+       
+        //var probs = TABLES.k_default_coeff_probs_32;
+        //var probs = TABLES.k_default_coeff_probs;
+        //var i = 1056;
+        //while (i--)
+          //  this.coeff_probs[i] = probs[i];
+          
+        for(var i = 0; i < 1056; i++){
+            this.coeff_probs[i] = vp8_coef_update_probs[i];
+            //console.warn(this.coeff_probs_32);
+            //console.warn(TABLES.k_default_coeff_probs_32);
+            //throw "er";
+        }
+        /*
+        for(var i = 0; i < 1056; i++){
+            if(this.coeff_probs[i] !== TABLES.k_default_coeff_probs[i] ){
+                console.warn("invalid at : " + i);
+            }
+        }
+        */
+       
         //this.coeff_probs = TABLES.k_default_coeff_probs.sl
         //this.coeff_probs[0] = probs[0];
         
@@ -123,28 +149,14 @@ class EntropyHeader {
         var x = 0;
 
         var coeff_probs = this.coeff_probs;
-        var coeff_probs_test = this.coeff_probs_test;
         /* Read coefficient probability updates */
+
         
-        
-        
-        for (i = 0; i < BLOCK_TYPES; i++) {
-            for (j = 0; j < COEF_BANDS; j++) {
-                for (k = 0; k < PREV_COEF_CONTEXTS; k++) {
-                    for (l = 0; l < ENTROPY_NODES; l++) {
-                        
-                        if (bool.get_prob(k_coeff_entropy_update_probs[i][j][k][l]) === 1){
-                            // 
-                            coeff_probs[x] = bool.get_uint(8);
-                            
-                        }
-                        x++;
-                    }
-                }
-            }
+        for(var i = 0; i < 1056; i++) {
+            if (bool.get_prob(TABLES.k_coeff_entropy_update_probs_flat[i]) === 1)
+                coeff_probs[i] = bool.get_uint(8);
         }
-        
-        //console.warn(this.coeff_probs_test[3][0][2][1]);
+
        
         /* Read coefficient skip mode probability */
         this.coeff_skip_enabled = bool.get_bit();
