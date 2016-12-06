@@ -10,15 +10,8 @@ var PREV_COEF_CONTEXTS = 3;
 var COEF_BANDS = 8;
 var ENTROPY_NODES = 11;
 
-//var correct = require("/Applications/MAMP/htdocs/FlareVPX/test/test-data/vp80-00-comprehensive-007.ivf.json");
-//var correctData = correct.tests[1].coeff_probs;
-//var correctDataBool = correct.tests[1].coeff_probs_bool;
-
-
 var MV_PROB_CNT =19;// 2 + 8 - 1 + 10;
 
-
-var md5 = require('js-md5');
 
 
 /*
@@ -70,19 +63,7 @@ class EntropyHeader {
         this.prob_gf = 0;
         
         
-        this.coeff_probs_test = new Array(BLOCK_TYPES);
-        for (var i = 0; i < BLOCK_TYPES; i++) {
-            this.coeff_probs_test[i] = new Array(COEF_BANDS);
-            
-            for (var j = 0; j < COEF_BANDS; j++) {
-                this.coeff_probs_test[i][j] = new Array(PREV_COEF_CONTEXTS);
-                for (var k = 0; k < PREV_COEF_CONTEXTS; k++) {
-                    this.coeff_probs_test[i][j][k] = new Uint8Array(ENTROPY_NODES);
-                }
-            }
-            
-            
-        }
+
         
        
     }
@@ -145,13 +126,6 @@ class EntropyHeader {
         var coeff_probs_test = this.coeff_probs_test;
         /* Read coefficient probability updates */
         
-        if (this.decoder.frame_hdr.is_keyframe === true){
-            if(md5(this.coeff_probs) !== md5(TABLES.k_default_coeff_probs)){
-            console.warn("+++++++++++++++++++++++++++++++++++++++++++");
-            console.warn("*************** COPY FAILED ***************");
-            console.warn("+++++++++++++++++++++++++++++++++++++++++++");
-            }
-        }
         
         
         for (i = 0; i < BLOCK_TYPES; i++) {
@@ -159,22 +133,11 @@ class EntropyHeader {
                 for (k = 0; k < PREV_COEF_CONTEXTS; k++) {
                     for (l = 0; l < ENTROPY_NODES; l++) {
                         
-                        if ((coeff_probs_test[i][j][k][l] = bool.get_prob(k_coeff_entropy_update_probs[i][j][k][l])) === 1){
+                        if (bool.get_prob(k_coeff_entropy_update_probs[i][j][k][l]) === 1){
                             // 
                             coeff_probs[x] = bool.get_uint(8);
                             
                         }
-                        /*
-                        if(coeff_probs[x] !== correctData[i][j][k][l]){
-                           console.warn("ERROR READING-----------------------------------"); 
-                           console.warn( coeff_probs[x] + " should be : " + correctData[i][j][k][l] );
-                        }
-                        
-                        if(coeff_probs_test[i][j][k][l] !== correctDataBool[i][j][k][l]){
-                           console.warn("ERROR READING BOOL-----------------------------------"); 
-                           console.warn( coeff_probs_test[i][j][k][l] + " should be : " + correctDataBool[i][j][k][l] );
-                        }
-                        */
                         x++;
                     }
                 }
