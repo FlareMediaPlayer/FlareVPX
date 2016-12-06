@@ -7,6 +7,10 @@ var k_default_mv_probs = TABLES.k_default_mv_probs;
 var default_coef_probs = require('./common/default_coef_probs.js');
 var vp8_coef_update_probs = require('./common/coefupdateprobs.js');
 
+var entropymv = require('./common/entropymv.js');
+var vp8_mv_update_probs = entropymv.vp8_mv_update_probs;
+var vp8_default_mv_context = entropymv.vp8_default_mv_context;
+
 var BLOCK_TYPES = 4;
 var PREV_COEF_CONTEXTS = 3;
 var COEF_BANDS = 8;
@@ -118,7 +122,7 @@ class EntropyHeader {
        //this.coeff_probs = probs.slice();
         
         //load mv probs
-        probs = k_default_mv_probs;
+        probs = vp8_default_mv_context;
         //this can probably be done faster
         for (var i = 0; i < MV_PROB_CNT; i++)
             this.mv_probs[0][i] = probs[0][i];
@@ -188,7 +192,7 @@ class EntropyHeader {
 
             for (i = 0; i < 2; i++)
                 for (j = 0; j < MV_PROB_CNT; j++)
-                    if (bool.get_prob(k_mv_entropy_update_probs[i][j]))
+                    if (bool.get_prob(vp8_mv_update_probs[i][j]))
                     {
                         var x = bool.get_uint(7);
                         //this.mv_probs[i][j] = x ? x << 1 : 1;

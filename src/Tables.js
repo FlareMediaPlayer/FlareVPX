@@ -34,43 +34,13 @@ var B_DC_PRED = 0, /* average of above and left pixels */
 
 var TABLES = {};
 
-TABLES.k_mv_entropy_update_probs =
-        [
-            new Uint8Array([
-                237,
-                246,
-                253, 253, 254, 254, 254, 254, 254,
-                254, 254, 254, 254, 254, 250, 250, 252, 254, 254
-            ]),
-            new Uint8Array([
-                231,
-                243,
-                245, 253, 254, 254, 254, 254, 254,
-                254, 254, 254, 254, 254, 251, 251, 254, 254, 254
-            ])
-        ];
 
 TABLES.k_default_y_mode_probs = new Uint8Array([112, 86, 140, 37]);
 TABLES.k_default_y_mode_probs_32 = new Uint32Array(TABLES.k_default_y_mode_probs.buffer);
 
 TABLES.k_default_uv_mode_probs = new Uint8Array([162, 101, 204]);
 
-TABLES.k_default_mv_probs =
-        [
-            new Uint8Array([// row
-                162, // is short
-                128, // sign
-                225, 146, 172, 147, 214, 39, 156, // short tree
-                128, 129, 132, 75, 145, 178, 206, 239, 254, 254 // long bits
-            ]),
-            new Uint8Array([
-                164,
-                128,
-                204, 170, 119, 235, 140, 230, 228,
-                128, 130, 130, 74, 148, 180, 203, 236, 254, 254
 
-            ])
-        ];
 
 
 TABLES.dc_q_lookup =
