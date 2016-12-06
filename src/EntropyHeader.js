@@ -10,9 +10,9 @@ var PREV_COEF_CONTEXTS = 3;
 var COEF_BANDS = 8;
 var ENTROPY_NODES = 11;
 
-var correct = require("/Applications/MAMP/htdocs/FlareVPX/test/test-data/vp80-00-comprehensive-007.ivf.json");
-var correctData = correct.tests[1].coeff_probs;
-var correctDataBool = correct.tests[1].coeff_probs_bool;
+//var correct = require("/Applications/MAMP/htdocs/FlareVPX/test/test-data/vp80-00-comprehensive-007.ivf.json");
+//var correctData = correct.tests[1].coeff_probs;
+//var correctDataBool = correct.tests[1].coeff_probs_bool;
 
 
 var MV_PROB_CNT =19;// 2 + 8 - 1 + 10;

@@ -162,20 +162,17 @@ function decode_frame(i, valid, demuxer) {
             
         }
         
-        
-        
+
+
         if (decoder.reference_hdr.refresh_entropy === 0) {
-            //this should probably be a deep copy
-            //decoder.saved_entropy.copyValues(decoder.entropy_hdr);
-            decoder.saved_entropy.loadDefaultProbs();
-            decoder.entropy_hdr.loadDefaultProbs();
+            decoder.saved_entropy.copyValues(decoder.entropy_hdr);
             decoder.saved_entropy_valid = 1;
-            assert.equal(md5(decoder.saved_entropy.coeff_probs), md5(decoder.entropy_hdr.coeff_probs));
             assert.equal(md5(decoder.saved_entropy.coeff_probs), valid.saved_entropy);
+
         }
-        
-        //assert.equal(decoder.saved_entropy_valid, valid.saved_entropy_valid);
-        
+
+        assert.equal(decoder.saved_entropy_valid, valid.saved_entropy_valid);
+
         
 
         
@@ -272,19 +269,20 @@ function decode_frame(i, valid, demuxer) {
             assert.equal(decoder.dequant_factors[i].factor[2][0], valid[keyStringBase + ".factor[2][0]"]);
             assert.equal(decoder.dequant_factors[i].factor[2][1], valid[keyStringBase + ".factor[2][1]"]);
         }
-        
-        
+
+        //UPDATE REFERENCES TO FRAMES AND STUFF
+        if (decoder.saved_entropy_valid === 1) {
+            decoder.entropy_hdr.copyValues(decoder.saved_entropy);
+            decoder.saved_entropy_valid = 0;
+        }
+
+
     });
+
+
+
+
     
-    
-    
-    
-    //UPDATE REFERENCES TO FRAMES AND STUFF
-    if (decoder.saved_entropy_valid === 1) {
-        decoder.entropy_hdr.copyValues(decoder.saved_entropy);
-        assert.equal(md5(decoder.saved_entropy.coeff_probs), md5(decoder.entropy_hdr.coeff_probs));
-        decoder.saved_entropy_valid = 0;
-    }
 }
 
 /*
@@ -333,7 +331,7 @@ describe('Running Test Vectors', function () {
             var valid = validationData.tests;
             var length = valid.length;
             
-            for (var i = 0; i < valid.length; i++) {                
+            for (var i = 0; i < length; i++) {                
                 decode_frame(i , valid[i], demuxer);   
                 //console.log(valid[i].is_keyframe);
             }

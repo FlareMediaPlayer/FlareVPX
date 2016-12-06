@@ -67,6 +67,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "12345d5cf46fd8c01f0627c384816c97", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -702,6 +703,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -1337,6 +1339,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -1972,6 +1975,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -2614,6 +2618,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -3249,6 +3254,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -3884,6 +3890,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -4519,6 +4526,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -5154,6 +5162,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -5796,6 +5805,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -6431,6 +6441,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -7066,6 +7077,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -7701,6 +7713,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
@@ -8336,6 +8349,7 @@
 "sign_bias[2]" : 0 ,
 "sign_bias[3]" : 0 ,
 "refresh_entropy" : 0 ,
+"saved_entropy_before" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy" : "03842b060afd2c81db7a05b4bb55f562", 
 "saved_entropy_valid" : 1 ,
 "coeff_probs_bool" : [ 
