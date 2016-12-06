@@ -79,7 +79,7 @@ class BoolDecoder {
             z |= (this.get_bit() << bit);
         }
 
-        return z | 0; 
+        return z ; 
     }
 
     /*
