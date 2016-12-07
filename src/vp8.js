@@ -68,18 +68,29 @@ function clamp_q(q) {
    return min(max(q, 0), 127)|0;
 }
 
-var dc_q_lookup = TABLES.dc_q_lookup;
+var quant_common = require('./common/quant_common.js');
+var dc_qlookup = quant_common.dc_qlookup;
+var ac_qlookup = quant_common.ac_qlookup;
+
+
 
 function dc_q(q) {
-    return dc_q_lookup[clamp_q(q)]|0;
+    return dc_qlookup[clamp_q(q)]|0;
 }
 
-var ac_q_lookup = TABLES.ac_q_lookup;
+
 
 function ac_q(q) {
-    return ac_q_lookup[clamp_q(q)]|0;
+    return ac_qlookup[clamp_q(q)]|0;
 }
 
+/*
+ * likely vp8cx_init_de_quantizer
+ * @param {type} factors
+ * @param {type} seg
+ * @param {type} quant_hdr
+ * @returns {undefined}
+ */
 function dequant_init(factors, seg, quant_hdr) {
     var i = 0;
     var q = 0;

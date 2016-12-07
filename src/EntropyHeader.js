@@ -1,8 +1,5 @@
 'use strict';
 var TABLES = require('./Tables.js');
-var k_coeff_entropy_update_probs = TABLES.k_coeff_entropy_update_probs;
-//var k_coeff_entropy_update_probs_flat = TABLES.k_coeff_entropy_update_probs_flat;
-var k_mv_entropy_update_probs = TABLES.k_mv_entropy_update_probs;
 var k_default_mv_probs = TABLES.k_default_mv_probs;
 var default_coef_probs = require('./common/default_coef_probs.js');
 var vp8_coef_update_probs = require('./common/coefupdateprobs.js');
