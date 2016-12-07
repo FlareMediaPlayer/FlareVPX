@@ -63,7 +63,93 @@ function vp8_dc_quant (QIndex, Delta) {
   return retval;
 }
 
+function vp8_dc2quant( QIndex,  Delta) {
+  var retval = 0;
+
+  QIndex = QIndex + Delta;
+
+  if (QIndex > 127) {
+    QIndex = 127;
+  } else if (QIndex < 0) {
+    QIndex = 0;
+  }
+
+  retval = dc_qlookup[QIndex] * 2;
+  return retval;
+}
+
+function vp8_dc_uv_quant( QIndex,  Delta) {
+  var retval = 0;
+
+  QIndex = QIndex + Delta;
+
+  if (QIndex > 127) {
+    QIndex = 127;
+  } else if (QIndex < 0) {
+    QIndex = 0;
+  }
+
+  retval = dc_qlookup[QIndex];
+
+  if (retval > 132) retval = 132;
+
+  return retval;
+}
+
+function vp8_ac_yquant(QIndex) {
+  var retval = 0;
+
+  if (QIndex > 127) {
+    QIndex = 127;
+  } else if (QIndex < 0) {
+    QIndex = 0;
+  }
+
+  retval = ac_qlookup[QIndex];
+  return retval;
+}
+
+function vp8_ac2quant( QIndex,  Delta) {
+  var retval = 0;
+
+  QIndex = QIndex + Delta;
+
+  if (QIndex > 127) {
+    QIndex = 127;
+  } else if (QIndex < 0) {
+    QIndex = 0;
+  }
+
+  /* For all x in [0..284], x*155/100 is bitwise equal to (x*101581) >> 16.
+   * The smallest precision for that is '(x*6349) >> 12' but 16 is a good
+   * word size. */
+  retval = (ac_qlookup[QIndex] * 101581) >> 16;
+
+  if (retval < 8) retval = 8;
+
+  return retval;
+}
+
+function vp8_ac_uv_quant( QIndex,  Delta) {
+  var retval = 0;
+
+  QIndex = QIndex + Delta;
+
+  if (QIndex > 127) {
+    QIndex = 127;
+  } else if (QIndex < 0) {
+    QIndex = 0;
+  }
+
+  retval = ac_qlookup[QIndex];
+  return retval;
+}
+
+
 module.exports = {};
-module.exports.dc_qlookup = dc_qlookup;
-module.exports.ac_qlookup = ac_qlookup;
 module.exports.vp8_dc_quant = vp8_dc_quant;
+module.exports.vp8_dc2quant = vp8_dc2quant;
+module.exports.vp8_dc_uv_quant = vp8_dc_uv_quant;
+module.exports.vp8_ac_yquant = vp8_ac_yquant;
+module.exports.vp8_ac2quant = vp8_ac2quant;
+module.exports.vp8_ac_uv_quant = vp8_ac_uv_quant;
