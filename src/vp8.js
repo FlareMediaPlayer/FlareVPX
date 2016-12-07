@@ -68,19 +68,24 @@ function clamp_q(q) {
    return min(max(q, 0), 127)|0;
 }
 
-var dc_q_lookup = TABLES.dc_q_lookup;
+var quant_common = require('./common/quant_common.js');
+var vp8_dc_quant = quant_common.vp8_dc_quant;
+var vp8_dc2quant = quant_common.vp8_dc2quant;
+var vp8_dc_uv_quant = quant_common.vp8_dc_uv_quant;
+var vp8_ac_yquant = quant_common.vp8_ac_yquant;
+var vp8_ac2quant = quant_common.vp8_ac2quant;
+var vp8_ac_uv_quant = quant_common.vp8_ac_uv_quant;
 
-function dc_q(q) {
-    return dc_q_lookup[clamp_q(q)]|0;
-}
 
-var ac_q_lookup = TABLES.ac_q_lookup;
-
-function ac_q(q) {
-    return ac_q_lookup[clamp_q(q)]|0;
-}
-
-function dequant_init(factors, seg, quant_hdr) {
+/*
+ * was dequant_init
+ * likely vp8cx_init_de_quantizer
+ * @param {type} factors
+ * @param {type} seg
+ * @param {type} quant_hdr
+ * @returns {undefined}
+ */
+function vp8cx_init_de_quantizer(factors, seg, quant_hdr) {
     var i = 0;
     var q = 0;
     var dqf = factors;
@@ -100,29 +105,19 @@ function dequant_init(factors, seg, quant_hdr) {
         factor = dqf[i].factor;
 
         if (dqf[i].quant_idx !== q || quant_hdr.delta_update) {
-            factor[TOKEN_BLOCK_Y1][0] =
-                    dc_q(q + quant_hdr.y1_dc_delta_q);
-            factor[TOKEN_BLOCK_Y1][1] =
-                    ac_q(q);
-            factor[TOKEN_BLOCK_UV][0] =
-                    dc_q(q + quant_hdr.uv_dc_delta_q);
-            factor[TOKEN_BLOCK_UV][1] =
-                    ac_q(q + quant_hdr.uv_ac_delta_q);
-            factor[TOKEN_BLOCK_Y2][0] =
-                    dc_q(q + quant_hdr.y2_dc_delta_q) << 1; 
-            factor[TOKEN_BLOCK_Y2][1] =
-                    (ac_q(q + quant_hdr.y2_ac_delta_q) * 1.55) | 0;
-
-            if (factor[TOKEN_BLOCK_Y2][1] < 8)
-                factor[TOKEN_BLOCK_Y2][1] = 8;
-
-            if (factor[TOKEN_BLOCK_UV][0] > 132)
-                factor[TOKEN_BLOCK_UV][0] = 132;
+            factor[TOKEN_BLOCK_Y1][0] = vp8_dc_quant(q , quant_hdr.y1_dc_delta_q);
+            factor[TOKEN_BLOCK_Y2][0] = vp8_dc2quant(q , quant_hdr.y2_dc_delta_q); 
+            factor[TOKEN_BLOCK_UV][0] = vp8_dc_uv_quant(q , quant_hdr.uv_dc_delta_q);
+            factor[TOKEN_BLOCK_Y1][1] = vp8_ac_yquant(q);
+            factor[TOKEN_BLOCK_Y2][1] = vp8_ac2quant(q , quant_hdr.y2_ac_delta_q);
+            factor[TOKEN_BLOCK_UV][1] = vp8_ac_uv_quant(q , quant_hdr.uv_ac_delta_q);
+            
 
             dqf[i].quant_idx = q;
         }
     }
 }
+
 
 
 class token_decoder {
@@ -195,6 +190,16 @@ class Vp8 {
         this.dequant_factors = new Array(MAX_MB_SEGMENTS);
         for (var i = 0; i < MAX_MB_SEGMENTS; i ++)
             this.dequant_factors[i] = new dequant_factors();
+        
+        
+        this.Width = 0;
+        this.Height = 0;
+        this.horiz_scale = 0;
+        this.vert_scale = 0;
+        this.show_frame = 0;
+        
+        this.version = 0;
+  
 
         this.ref_frame_offsets = new Uint32Array([0, 0, 0, 0]); 
         this.ref_frame_offsets_ = [0, 0, 0, 0]; 
@@ -316,7 +321,7 @@ class Vp8 {
      * @returns {undefined}
      */
     dequantInit(){
-        dequant_init(this.dequant_factors, this.segment_hdr, this.quant_hdr);
+        vp8cx_init_de_quantizer(this.dequant_factors, this.segment_hdr, this.quant_hdr);
     }
 }
 

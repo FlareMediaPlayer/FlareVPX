@@ -1,5 +1,5 @@
 "use strict";
-var MotionVector = require('./MotionVector.js');
+var MotionVector = require('./common/mv.js');
 
 class mb_info {
     constructor() {

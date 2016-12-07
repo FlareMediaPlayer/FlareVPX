@@ -8,6 +8,7 @@ var path = require( 'path' );
 var process = require( "process" );
 var md5 = require('js-md5');
 var Predict = require('../src/Predict.js');
+var TABLES = require('../src/Tables.js');
 
 
 var decoder = new vp8();
@@ -20,6 +21,11 @@ var FRAME_HEADER_SZ = 3;
 var KEYFRAME_HEADER_SZ = 7;
 var MAX_PARTITIONS = 8;
 var data;
+
+var BLOCK_TYPES = 4;
+var PREV_COEF_CONTEXTS = 3;
+var COEF_BANDS = 8;
+var ENTROPY_NODES = 11;
 
 function decode_frame(i, valid, demuxer) {
     it('decode frame : ' + i, function () {
@@ -150,28 +156,31 @@ function decode_frame(i, valid, demuxer) {
         assert.equal(decoder.reference_hdr.refresh_entropy, valid.refresh_entropy);
         
 
-        if (decoder.frame_hdr.is_keyframe === true)
+        if (decoder.frame_hdr.is_keyframe === true){
             // Load coefficient probability updates
             decoder.entropy_hdr.loadDefaultProbs();
-
-        if (decoder.reference_hdr.refresh_entropy === 0) {
-            //this should probably be a deep copy
-            decoder.saved_entropy = decoder.entropy_hdr;
-            decoder.saved_entropy_valid = 1;
+            
         }
         
-        
+
+
+        if (decoder.reference_hdr.refresh_entropy === 0) {
+            decoder.saved_entropy.copyValues(decoder.entropy_hdr);
+            decoder.saved_entropy_valid = 1;
+            //assert.equal(md5(decoder.saved_entropy.coeff_probs), valid.saved_entropy);
+
+        }
+
         assert.equal(decoder.saved_entropy_valid, valid.saved_entropy_valid);
+
+        
+
+        
+        
         decoder.entropy_hdr.decode();
 
         //Test decoded data
-        
-        //Something wrong with this test
-        //assert.equal(md5(decoder.entropy_hdr.coeff_probs), valid.coeff_probs);
-        //assert.equal(decoder.entropy_hdr.coeff_probs[0], valid.coeff_probs[0][0][0][0]);
-        //console.log(valid.coeff_probs[0]);
-        //console.log(decoder.entropy_hdr.coeff_probs[0]);
-        
+        assert.equal(md5(decoder.entropy_hdr.coeff_probs),valid.coeff_probs);
         
         assert.equal(decoder.entropy_hdr.coeff_skip_enabled, valid.coeff_skip_enabled);
         assert.equal(decoder.entropy_hdr.coeff_skip_prob, valid.coeff_skip_prob);
@@ -218,9 +227,20 @@ function decode_frame(i, valid, demuxer) {
             assert.equal(decoder.dequant_factors[i].factor[2][0], valid[keyStringBase + ".factor[2][0]"]);
             assert.equal(decoder.dequant_factors[i].factor[2][1], valid[keyStringBase + ".factor[2][1]"]);
         }
-        
-        
+
+        //UPDATE REFERENCES TO FRAMES AND STUFF
+        if (decoder.saved_entropy_valid === 1) {
+            decoder.entropy_hdr.copyValues(decoder.saved_entropy);
+            decoder.saved_entropy_valid = 0;
+        }
+
+
     });
+
+
+
+
+    
 }
 
 /*
@@ -267,8 +287,9 @@ describe('Running Test Vectors', function () {
             //decoder = new vp8();
             
             var valid = validationData.tests;
+            var length = valid.length;
             
-            for (var i = 0; i < valid.length; i++) {                
+            for (var i = 0; i < length; i++) {                
                 decode_frame(i , valid[i], demuxer);   
                 //console.log(valid[i].is_keyframe);
             }
@@ -277,4 +298,6 @@ describe('Running Test Vectors', function () {
         });
         
     }
+    
+
 });

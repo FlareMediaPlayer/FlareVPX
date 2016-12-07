@@ -1,17 +1,21 @@
 'use strict';
 var TABLES = require('./Tables.js');
-var k_coeff_entropy_update_probs = TABLES.k_coeff_entropy_update_probs;
-//var k_coeff_entropy_update_probs_flat = TABLES.k_coeff_entropy_update_probs_flat;
-var k_mv_entropy_update_probs = TABLES.k_mv_entropy_update_probs;
 var k_default_mv_probs = TABLES.k_default_mv_probs;
+var default_coef_probs = require('./common/default_coef_probs.js');
+var vp8_coef_update_probs = require('./common/coefupdateprobs.js');
+
+var entropymv = require('./common/entropymv.js');
+var vp8_mv_update_probs = entropymv.vp8_mv_update_probs;
+var vp8_default_mv_context = entropymv.vp8_default_mv_context;
 
 var BLOCK_TYPES = 4;
 var PREV_COEF_CONTEXTS = 3;
 var COEF_BANDS = 8;
 var ENTROPY_NODES = 11;
 
-
 var MV_PROB_CNT =19;// 2 + 8 - 1 + 10;
+
+
 
 /*
  *  struct vp8_entropy_hdr
@@ -60,18 +64,51 @@ class EntropyHeader {
         this.prob_inter = 0;
         this.prob_last = 0;
         this.prob_gf = 0;
+        
+        
+
+        
+       
     }
     
     loadDefaultProbs() {
+        var probs;
         //load coef probs
+       //if(md5(TABLES.k_default_coeff_probs_32) !== md5(TABLES.k_default_coeff_probs))
+         //   console.warn("Invalid copy");
+        
+        /*
         var probs = TABLES.k_default_coeff_probs_32;
-
-       
-       var probs = TABLES.k_default_coeff_probs;
+        var probs = TABLES.k_default_coeff_probs;
         var i = 1056;
         while (i--)
             this.coeff_probs[i] = probs[i];
-        this.coeff_probs[0] = probs[0];
+        */
+        
+       
+       
+        //var probs = TABLES.k_default_coeff_probs_32;
+        //var probs = TABLES.k_default_coeff_probs;
+        //var i = 1056;
+        //while (i--)
+          //  this.coeff_probs[i] = probs[i];
+          
+        for(var i = 0; i < 1056; i++){
+            this.coeff_probs[i] = default_coef_probs[i];
+            //console.warn(this.coeff_probs_32);
+            //console.warn(TABLES.k_default_coeff_probs_32);
+            //throw "er";
+        }
+        /*
+        for(var i = 0; i < 1056; i++){
+            if(this.coeff_probs[i] !== TABLES.k_default_coeff_probs[i] ){
+                console.warn("invalid at : " + i);
+            }
+        }
+        */
+       
+        //this.coeff_probs = TABLES.k_default_coeff_probs.sl
+        //this.coeff_probs[0] = probs[0];
         
         /*
         var i = 264;
@@ -82,7 +119,7 @@ class EntropyHeader {
        //this.coeff_probs = probs.slice();
         
         //load mv probs
-        probs = k_default_mv_probs;
+        probs = vp8_default_mv_context;
         //this can probably be done faster
         for (var i = 0; i < MV_PROB_CNT; i++)
             this.mv_probs[0][i] = probs[0][i];
@@ -102,6 +139,8 @@ class EntropyHeader {
         this.uv_mode_probs[0] = probs[0];
         this.uv_mode_probs[1] = probs[1];
         this.uv_mode_probs[2] = probs[2];
+        
+        
     }
 
     decode() {
@@ -112,22 +151,13 @@ class EntropyHeader {
         var x = 0;
 
         var coeff_probs = this.coeff_probs;
-        
         /* Read coefficient probability updates */
+
         
-        for (i = 0; i < BLOCK_TYPES; i++) {
-            for (j = 0; j < COEF_BANDS; j++) {
-                for (k = 0; k < PREV_COEF_CONTEXTS; k++) {
-                    for (l = 0; l < ENTROPY_NODES; l++) {
-                        if (bool.get_prob(k_coeff_entropy_update_probs[i][j][k][l])){
-                            coeff_probs[x] = bool.get_uint(8);
-                        }
-                        x++;
-                    }
-                }
-            }
+        for(var i = 0; i < 1056; i++) {
+            if (bool.get_prob(vp8_coef_update_probs[i]) === 1)
+                coeff_probs[i] = bool.get_uint(8);
         }
-        
 
        
         /* Read coefficient skip mode probability */
@@ -159,7 +189,7 @@ class EntropyHeader {
 
             for (i = 0; i < 2; i++)
                 for (j = 0; j < MV_PROB_CNT; j++)
-                    if (bool.get_prob(k_mv_entropy_update_probs[i][j]))
+                    if (bool.get_prob(vp8_mv_update_probs[i][j]))
                     {
                         var x = bool.get_uint(7);
                         //this.mv_probs[i][j] = x ? x << 1 : 1;
@@ -170,6 +200,56 @@ class EntropyHeader {
                         }
                     }
         }
+    }
+    
+    copyValues(otherHeader) {
+        //console.warn("-----------------------COPYING VALUES--------------------");
+        var probs = otherHeader.coeff_probs;
+        this.coeff_probs = otherHeader.coeff_probs.slice(0);
+                /*
+                 var i = 1056;
+                 while (i--)
+            this.coeff_probs[i] = probs[i];
+        */
+        
+        
+        //this.coeff_probs = TABLES.k_default_coeff_probs.sl
+        //this.coeff_probs[0] = probs[0];
+        
+        /*
+        var i = 264;
+        var coeff_probs_32 = this.coeff_probs_32;
+        while (i--)
+            coeff_probs_32[i] = probs[i];
+        */
+       //this.coeff_probs = probs.slice();
+        
+        //load mv probs
+        probs = otherHeader.mv_probs;
+        //this can probably be done faster
+        for (var i = 0; i < MV_PROB_CNT; i++)
+            this.mv_probs[0][i] = probs[0][i];
+
+        for (var i = 0; i < MV_PROB_CNT; i++)
+            this.mv_probs[1][i] = probs[1][i];
+
+        //load y mode probs
+        probs = otherHeader.y_mode_probs_32;
+        this.y_mode_probs_32[0] = probs[0];
+
+
+
+        //load uv mode probs
+        probs = otherHeader.uv_mode_probs;
+        //for (var i = 0; i < 3; i++)
+        this.uv_mode_probs[0] = probs[0];
+        this.uv_mode_probs[1] = probs[1];
+        this.uv_mode_probs[2] = probs[2];
+        
+        
+        this.prob_inter = otherHeader.prob_inter;
+        this.prob_last = otherHeader.prob_inter;
+        this.prob_gf = otherHeader.prob_inter;
     }
 }
 

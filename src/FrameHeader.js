@@ -33,8 +33,6 @@ class FrameHeader {
      */
     parse(data, sz) {
 
-        if (sz < 10)
-            return VPX_CODEC_CORRUPT_FRAME;
 
         var clear0 = data[0];
         this.is_keyframe = !(clear0 & 0x01); 
