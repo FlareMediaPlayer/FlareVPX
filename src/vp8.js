@@ -71,7 +71,7 @@ function clamp_q(q) {
 var quant_common = require('./common/quant_common.js');
 var dc_qlookup = quant_common.dc_qlookup;
 var ac_qlookup = quant_common.ac_qlookup;
-
+var vp8_dc_quant = quant_common.vp8_dc_quant;
 
 
 function dc_q(q) {
@@ -111,18 +111,13 @@ function dequant_init(factors, seg, quant_hdr) {
         factor = dqf[i].factor;
 
         if (dqf[i].quant_idx !== q || quant_hdr.delta_update) {
-            factor[TOKEN_BLOCK_Y1][0] =
-                    dc_q(q + quant_hdr.y1_dc_delta_q);
-            factor[TOKEN_BLOCK_Y1][1] =
-                    ac_q(q);
-            factor[TOKEN_BLOCK_UV][0] =
-                    dc_q(q + quant_hdr.uv_dc_delta_q);
-            factor[TOKEN_BLOCK_UV][1] =
-                    ac_q(q + quant_hdr.uv_ac_delta_q);
-            factor[TOKEN_BLOCK_Y2][0] =
-                    dc_q(q + quant_hdr.y2_dc_delta_q) << 1; 
-            factor[TOKEN_BLOCK_Y2][1] =
-                    (ac_q(q + quant_hdr.y2_ac_delta_q) * 1.55) | 0;
+            factor[TOKEN_BLOCK_Y1][0] = vp8_dc_quant(q , quant_hdr.y1_dc_delta_q);
+            factor[TOKEN_BLOCK_Y2][0] = dc_q(q + quant_hdr.y2_dc_delta_q) << 1; 
+            factor[TOKEN_BLOCK_UV][0] = dc_q(q + quant_hdr.uv_dc_delta_q);
+            factor[TOKEN_BLOCK_Y1][1] = ac_q(q);
+            factor[TOKEN_BLOCK_Y2][1] = (ac_q(q + quant_hdr.y2_ac_delta_q) * 1.55) | 0;
+            factor[TOKEN_BLOCK_UV][1] = ac_q(q + quant_hdr.uv_ac_delta_q);
+            
 
             if (factor[TOKEN_BLOCK_Y2][1] < 8)
                 factor[TOKEN_BLOCK_Y2][1] = 8;
