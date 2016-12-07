@@ -78,13 +78,14 @@ var vp8_ac_uv_quant = quant_common.vp8_ac_uv_quant;
 
 
 /*
+ * was dequant_init
  * likely vp8cx_init_de_quantizer
  * @param {type} factors
  * @param {type} seg
  * @param {type} quant_hdr
  * @returns {undefined}
  */
-function dequant_init(factors, seg, quant_hdr) {
+function vp8cx_init_de_quantizer(factors, seg, quant_hdr) {
     var i = 0;
     var q = 0;
     var dqf = factors;
@@ -117,9 +118,7 @@ function dequant_init(factors, seg, quant_hdr) {
     }
 }
 
-/*
-module.exports.vp8_ac_uv_quant = vp8_ac_uv_quant;
- */
+
 
 class token_decoder {
     
@@ -191,6 +190,16 @@ class Vp8 {
         this.dequant_factors = new Array(MAX_MB_SEGMENTS);
         for (var i = 0; i < MAX_MB_SEGMENTS; i ++)
             this.dequant_factors[i] = new dequant_factors();
+        
+        
+        this.Width = 0;
+        this.Height = 0;
+        this.horiz_scale = 0;
+        this.vert_scale = 0;
+        this.show_frame = 0;
+        
+        this.version = 0;
+  
 
         this.ref_frame_offsets = new Uint32Array([0, 0, 0, 0]); 
         this.ref_frame_offsets_ = [0, 0, 0, 0]; 
@@ -312,7 +321,7 @@ class Vp8 {
      * @returns {undefined}
      */
     dequantInit(){
-        dequant_init(this.dequant_factors, this.segment_hdr, this.quant_hdr);
+        vp8cx_init_de_quantizer(this.dequant_factors, this.segment_hdr, this.quant_hdr);
     }
 }
 

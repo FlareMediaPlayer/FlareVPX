@@ -44,10 +44,6 @@ TABLES.k_default_uv_mode_probs = new Uint8Array([162, 101, 204]);
 
 
 
-
-
-
-
 TABLES.kf_y_mode_probs = new Uint8Array([145, 156, 163, 128]);
 
 TABLES.kf_uv_mode_probs = new Uint8Array([142, 114, 183]);
