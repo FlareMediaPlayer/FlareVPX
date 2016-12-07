@@ -1,5 +1,10 @@
 'use strict';
-//QINDEX_RANGE
+/*
+ * #define MINQ 0
+#define MAXQ 127
+#define QINDEX_RANGE (MAXQ + 1)
+ */
+//QINDEX_RANGE = 128
 
 //dc_q_lookup
 var dc_qlookup =
@@ -43,7 +48,22 @@ var ac_qlookup =
             249, 254, 259, 264, 269, 274, 279, 284
         ]);
 
+function vp8_dc_quant (QIndex, Delta) {
+  var retval = 0;
+
+  QIndex = QIndex + Delta;
+
+  if (QIndex > 127) {
+    QIndex = 127;
+  } else if (QIndex < 0) {
+    QIndex = 0;
+  }
+
+  retval = dc_qlookup[QIndex];
+  return retval;
+}
 
 module.exports = {};
 module.exports.dc_qlookup = dc_qlookup;
 module.exports.ac_qlookup = ac_qlookup;
+module.exports.vp8_dc_quant = vp8_dc_quant;
