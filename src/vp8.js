@@ -33,6 +33,23 @@ var NUM_REF_FRAMES = 4;
 var MAX_PARTITIONS = 8;
 var MAX_MB_SEGMENTS = 4;
 
+
+var DC_PRED = 0;
+var V_PRED = 1;
+var H_PRED = 2; 
+var TM_PRED = 3; 
+var B_PRED = 4; 
+var NEARESTMV = 5;
+var NEARMV = 6;
+var ZEROMV = 7;
+var NEWMV = 8;
+var SPLITMV = 9;
+var MB_MODE_COUNT = 10;
+
+var b_mode_tree = TABLES.b_mode_tree;
+var kf_y_mode_tree = TABLES.kf_y_mode_tree;
+var kf_y_mode_probs = TABLES.kf_y_mode_probs;
+
 var getTimestamp;
 if (typeof performance === 'undefined' || typeof performance.now === 'undefined') {
     getTimestamp = Date.now;
@@ -60,6 +77,12 @@ class dequant_factors {
     }
 }
 
+function read_segment_id(bool, seg) {
+    return bool.get_prob(seg.tree_probs[0])
+            ? 2 + bool.get_prob(seg.tree_probs[2])
+            : bool.get_prob(seg.tree_probs[1]);
+}
+
 //Helper functions for dequant_init
 var min = Math.min;
 var max = Math.max;
@@ -76,6 +99,100 @@ var vp8_ac_yquant = quant_common.vp8_ac_yquant;
 var vp8_ac2quant = quant_common.vp8_ac2quant;
 var vp8_ac_uv_quant = quant_common.vp8_ac_uv_quant;
 
+var bounds_modemv_process = {
+        to_left: 0,
+        to_right: 0,
+        to_top: 0,
+        to_bottom: 0
+    };
+    
+function vp8_dixie_modemv_process_row(ctx, bool, row, start_col, num_cols) {
+    var above, above_off = 0, this_, this_off = 0;
+    var col = 0;
+
+
+    var bounds = bounds_modemv_process;
+    
+    this_ = ctx.mb_info_rows; //[1 + row];
+    this_off = ctx.mb_info_rows_off[1 + row] + start_col;
+    above = ctx.mb_info_rows; //[1 + row - 1];
+    above_off = ctx.mb_info_rows_off[row] + start_col;
+    
+    // Calculate the eighth-pel MV bounds using a 1 MB border.
+    bounds.to_left = -((start_col + 1) << 7);
+    bounds.to_right = (ctx.mb_cols - start_col) << 7;
+    bounds.to_top = -((row + 1) << 7);
+    bounds.to_bottom = (ctx.mb_rows - row) << 7;
+    
+    //always starts at 0, not sure what the point of start_col is
+    
+    for (col = start_col; col < start_col + num_cols; col++) {
+        
+    
+        if (ctx.segment_hdr.update_map === 1)
+            this_[this_off].base.segment_id = read_segment_id(bool, ctx.segment_hdr);
+
+        if (ctx.entropy_hdr.coeff_skip_enabled === 1)
+            this_[this_off].base.skip_coeff = bool.get_prob(ctx.entropy_hdr.coeff_skip_prob);
+
+        
+        if (ctx.frame_hdr.is_keyframe === true) {
+            if (ctx.segment_hdr.update_map === 0)
+                this_[this_off].base.segment_id = 0;
+
+            decode_kf_mb_mode(this_, this_off, this_, this_off - 1, above, above_off, bool);
+        } /* else {
+            if (bool.get_prob(ctx.entropy_hdr.prob_inter) > 0)
+                decode_mvs(ctx, this_, this_off, this_, this_off - 1, above, above_off, bounds, bool);
+            else
+                decode_intra_mb_mode(this_[this_off], ctx.entropy_hdr, bool);
+
+            bounds.to_left -= 16 << 3;
+            bounds.to_right -= 16 << 3;
+        }
+        */
+
+        // Advance to next mb
+        
+        this_off++;
+        above_off++;
+    }
+    
+}
+
+
+function decode_kf_mb_mode(this_, this_off, //*
+        left, left_off, //*
+        above, above_off, //*
+        bool) {
+    var y_mode = 0;
+    var uv_mode = 0;
+
+    y_mode = bool.read_tree(kf_y_mode_tree, kf_y_mode_probs);
+
+    if (y_mode === B_PRED) {
+        var i = 0;
+
+        for (i = 0; i < 16; i++)
+        {
+            var a = above_block_mode(this_[this_off], above[above_off], i);
+            var l = left_block_mode(this_[this_off], left[left_off], i);
+            var b = 0;//enum prediction_mode
+
+            b = bool.read_tree(TABLES.b_mode_tree,
+                    TABLES.kf_b_mode_probs[a][l]);
+            this_[this_off].splitt.modes[i] = this_[this_off].splitt.mvs[i].x = b;
+            this_[this_off].splitt.mvs[i].y = 0;
+        }
+    }
+
+    uv_mode = bool.read_tree(TABLES.uv_mode_tree, TABLES.kf_uv_mode_probs);
+
+    this_[this_off].base.y_mode = y_mode;
+    this_[this_off].base.uv_mode = uv_mode;
+    this_[this_off].base.mv.x = this_[this_off].base.mv.y = 0;//raw = 0;
+    this_[this_off].base.ref_frame = 0;
+}
 
 /*
  * was dequant_init
