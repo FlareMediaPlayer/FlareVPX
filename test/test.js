@@ -228,6 +228,44 @@ function decode_frame(i, valid, demuxer) {
             assert.equal(decoder.dequant_factors[i].factor[2][1], valid[keyStringBase + ".factor[2][1]"]);
         }
 
+        
+        var mb_rows = decoder.mb_rows;
+        var mb_cols = decoder.mb_cols;
+        var partition = 0;
+        var row = 0;
+        for (row = 0, partition = 0; row < mb_rows; row++) {
+
+            decoder.vp8_dixie_modemv_process_row(decoder, decoder.boolDecoder, row, 0, mb_cols);
+
+
+            
+            for (var col = 0; col <  mb_cols; col++) {
+                
+                //TESTING MOTION VECTORS
+                var this_ = decoder.mb_info_rows;
+                var this_off = decoder.mb_info_rows_off[1 + row] + col;
+                var above = decoder.mb_info_rows;
+                var above_off = decoder.mb_info_rows_off[row] + col;
+            
+                var row_prefix = "modemv_process_row_" + row;
+                var col_prefix = "modemv_col_" + col;
+                
+                
+                var mvTestVal = valid[row_prefix][col_prefix]["this"]["base.segment_id"];
+
+
+                assert.equal(this_[this_off].base.segment_id, mvTestVal);
+
+
+            }
+
+
+            if (++partition === decoder.token_hdr.partitions)
+                partition = 0;
+        }
+
+
+
         //UPDATE REFERENCES TO FRAMES AND STUFF
         if (decoder.saved_entropy_valid === 1) {
             decoder.entropy_hdr.copyValues(decoder.saved_entropy);
