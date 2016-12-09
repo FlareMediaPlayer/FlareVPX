@@ -15,6 +15,10 @@ var TABLES = require('./Tables.js');
 var mb_info = require('./MacroblockInfo.js');
 var MotionVector = require('./common/mv.js');
 
+var decodemv = require("./decoder/decodemv.js");
+var read_mb_features = decodemv.read_mb_features;
+
+
 var TOKEN_BLOCK_Y1 = 0;
 var TOKEN_BLOCK_UV = 1;
 var TOKEN_BLOCK_Y2 = 2;
@@ -601,11 +605,7 @@ var bounds_modemv_process = {
         to_bottom: 0
     };
 
-function read_segment_id(bool, seg) {
-    return bool.get_prob(seg.tree_probs[0])
-            ? 2 + bool.get_prob(seg.tree_probs[2])
-            : bool.get_prob(seg.tree_probs[1]);
-}
+
     
 
 function  decode_intra_mb_mode(this_, hdr, bool) {
@@ -633,7 +633,10 @@ function  decode_intra_mb_mode(this_, hdr, bool) {
     this_.base.mv.x = this_.base.mv.y = 0;
     this_.base.ref_frame = CURRENT_FRAME;
 }
-    
+
+
+
+
 function vp8_dixie_modemv_process_row(ctx, bool, row, start_col, num_cols) {
     var above, above_off = 0, this_, this_off = 0;
     var col = 0;
@@ -656,9 +659,9 @@ function vp8_dixie_modemv_process_row(ctx, bool, row, start_col, num_cols) {
     for (col = start_col; col < start_col + num_cols; col++) {
         
     
-        if (ctx.segment_hdr.update_map === 1)
-            this_[this_off].base.segment_id = read_segment_id(bool, ctx.segment_hdr);
-        
+        //if (ctx.segment_hdr.update_map === 1)
+          //  this_[this_off].base.segment_id = read_segment_id(bool, ctx.segment_hdr);
+        read_mb_features(bool, this_[this_off],  ctx.segment_hdr);
          
         if (ctx.entropy_hdr.coeff_skip_enabled === 1)
             this_[this_off].base.skip_coeff = bool.get_prob(ctx.entropy_hdr.coeff_skip_prob);
@@ -690,6 +693,8 @@ function vp8_dixie_modemv_process_row(ctx, bool, row, start_col, num_cols) {
 
 var vp8_entropymodedata = require("./common/vp8_entropymodedata");
 var vp8_kf_bmode_prob = vp8_entropymodedata.vp8_kf_bmode_prob;
+
+
 
 function decode_kf_mb_mode(this_, this_off, //*
         left, left_off, //*
