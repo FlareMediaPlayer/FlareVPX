@@ -233,6 +233,7 @@ function decode_frame(i, valid, demuxer) {
         var mb_cols = decoder.mb_cols;
         var partition = 0;
         var row = 0;
+        
         for (row = 0, partition = 0; row < mb_rows; row++) {
 
             decoder.vp8_dixie_modemv_process_row(decoder, decoder.boolDecoder, row, 0, mb_cols);
