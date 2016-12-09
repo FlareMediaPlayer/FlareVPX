@@ -256,7 +256,9 @@ function decode_frame(i, valid, demuxer) {
 
 
                 assert.equal(this_[this_off].base.segment_id, mvTestVal);
-
+                
+                mvTestVal = valid[row_prefix][col_prefix]["this"]["base.y_mode"];
+                assert.equal(this_[this_off].base.y_mode, mvTestVal);
 
             }
 
