@@ -21,7 +21,7 @@ class mb_info {
         while (i--)
             mvs[i] = new MotionVector();
         
-
+        //Only needed for spit mode, maybe can skip initialization unless splitt mode is on
         this.splitt =
                 {
                     mvs: mvs,

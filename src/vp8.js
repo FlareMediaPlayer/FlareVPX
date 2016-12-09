@@ -17,6 +17,7 @@ var MotionVector = require('./common/mv.js');
 
 var decodemv = require("./decoder/decodemv.js");
 var read_mb_features = decodemv.read_mb_features;
+var decode_kf_mb_mode = decodemv.decode_kf_mb_mode;
 
 
 var TOKEN_BLOCK_Y1 = 0;
@@ -102,51 +103,7 @@ class dequant_factors {
 }
 
 
-function left_block_mode(this_, left, b) {
-    if (!(b & 3))
-    {
-        switch (left.base.y_mode)
-        {
-            case DC_PRED:
-                return B_DC_PRED;
-            case V_PRED:
-                return B_VE_PRED;
-            case H_PRED:
-                return B_HE_PRED;
-            case TM_PRED:
-                return B_TM_PRED;
-            case B_PRED:
-                return left.splitt.mvs[b + 3].x;
-            default:
-                throw "ERROR :(";
-        }
-    }
 
-    return this_.splitt.mvs[b - 1].x;
-}
-
-
-function above_block_mode(this_, above, b) {
-    if (b < 4) {
-        switch (above.base.y_mode)
-        {
-            case DC_PRED:
-                return B_DC_PRED;
-            case V_PRED:
-                return B_VE_PRED;
-            case H_PRED:
-                return B_HE_PRED;
-            case TM_PRED:
-                return B_TM_PRED;
-            case B_PRED:
-                return above.splitt.mvs[b + 12].x;
-            default:
-                throw "ERROR :(";
-        }
-    }
-
-    return this_.splitt.mvs[b - 4].x;
-}
 
 function clamp_mv(raw, bounds) {
     var newmv = new MotionVector();
@@ -659,9 +616,8 @@ function vp8_dixie_modemv_process_row(ctx, bool, row, start_col, num_cols) {
     for (col = start_col; col < start_col + num_cols; col++) {
         
     
-        //if (ctx.segment_hdr.update_map === 1)
-          //  this_[this_off].base.segment_id = read_segment_id(bool, ctx.segment_hdr);
-        read_mb_features(bool, this_[this_off],  ctx.segment_hdr);
+
+        read_mb_features(bool, this_[this_off], ctx.segment_hdr);
          
         if (ctx.entropy_hdr.coeff_skip_enabled === 1)
             this_[this_off].base.skip_coeff = bool.get_prob(ctx.entropy_hdr.coeff_skip_prob);
@@ -695,39 +651,6 @@ var vp8_entropymodedata = require("./common/vp8_entropymodedata");
 var vp8_kf_bmode_prob = vp8_entropymodedata.vp8_kf_bmode_prob;
 
 
-
-function decode_kf_mb_mode(this_, this_off, //*
-        left, left_off, //*
-        above, above_off, //*
-        bool) {
-    var y_mode = 0;
-    var uv_mode = 0;
-
-    y_mode = bool.read_tree(kf_y_mode_tree, kf_y_mode_probs);
-
-    if (y_mode === B_PRED) {
-        var i = 0;
-
-        for (i = 0; i < 16; i++)
-        {
-            var a = above_block_mode(this_[this_off], above[above_off], i);
-            var l = left_block_mode(this_[this_off], left[left_off], i);
-            var b = 0;//enum prediction_mode
-
-            b = bool.read_tree(TABLES.b_mode_tree,
-                    vp8_kf_bmode_prob[a][l]);
-            this_[this_off].splitt.modes[i] = this_[this_off].splitt.mvs[i].x = b;
-            this_[this_off].splitt.mvs[i].y = 0;
-        }
-    }
-
-    uv_mode = bool.read_tree(TABLES.uv_mode_tree, TABLES.kf_uv_mode_probs);
-
-    this_[this_off].base.y_mode = y_mode;
-    this_[this_off].base.uv_mode = uv_mode;
-    this_[this_off].base.mv.x = this_[this_off].base.mv.y = 0;//raw = 0;
-    this_[this_off].base.ref_frame = 0;
-}
 
 /*
  * was dequant_init
